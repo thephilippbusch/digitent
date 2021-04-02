@@ -1,21 +1,16 @@
 import React from 'react';
-import styled from 'styled-components';
+import { Box, Spinner } from 'grommet'
 
-import Spinner from './spinner';
-
-const Loader = styled.div`
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-`;
-
-const LoadingScreen = () => {
+const LoadingScreen = (props) => {
     return (
-        <Loader>
-            <Spinner />
-        </Loader>
+        <Box
+            fill
+            direction="row"
+            justify="center"
+            align="center"
+        >
+            <Spinner color={props.color ? props.color : 'brand'}/>
+        </Box>
     )
 }
 
