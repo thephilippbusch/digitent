@@ -54,7 +54,7 @@ const Login = () => {
                         setLoginData(init)
 
                         setAuthToken(response.data.token)
-                        setCurrentUser(response.data.data.id)
+                        setCurrentUser(response.data.data._id)
                         history.replace(from)
                     }
                     

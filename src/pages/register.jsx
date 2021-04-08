@@ -48,11 +48,13 @@ const Register = () => {
                 registerData.username !== ''
             ) {
                 if(registerData.password === registerData.confirm) {
-                    const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/auth/register`, {
+                    const payload = {
                         email: registerData.email,
                         password: SHA256(registerData.password),
                         username: registerData.username
-                    })
+                    }
+                    console.log(payload)
+                    const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/auth/register`, payload)
                     if(response.hasOwnProperty('data')) {
                         if(response.data.status === 200) {
                             console.log(response)
@@ -60,7 +62,7 @@ const Register = () => {
                             setRegisterData(init)
 
                             setAuthToken(response.data.token)
-                            setCurrentUser(response.data.data)
+                            setCurrentUser(response.data.data._id)
                             history.replace(from)
                         }
                         if(response.data.status === 400) {

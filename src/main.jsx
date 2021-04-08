@@ -66,7 +66,7 @@ const Main = () => {
                                         component={LoadProfile} 
                                     />
                                 </ThemeContext.Provider>
-                                <PrivateRoute exact path="/" component={LoadHome} randomNumb={4}/>
+                                <PrivateRoute exact path="/" component={LoadHome}/>
                             </MainBox>
                         </CurrentUser.Provider>
                     </Switch>

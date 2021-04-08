@@ -7,17 +7,14 @@ import LoadingScreen from '../components/loadingscreen'
 
 const LoadHome = (props) => {
     const [data, setData] = useState({ fetched: null, isFetching: false })
-    const { authToken } = useAuth();
+    const { authToken } = useAuth()
     const { currentUser } = useCurrentUser()
 
     useEffect(() => {
         const fetchData = async () => {
             setData({ fetched: data, isFetching: true })
             try {
-                let payload = {
-                    id: currentUser
-                }
-                const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/user/id`, payload, {
+                const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/user/id?id=${currentUser}`, {
                     headers: {
                         Authorization: 'Bearer ' + authToken
                     }

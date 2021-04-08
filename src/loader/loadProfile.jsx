@@ -5,20 +5,16 @@ import { useAuth, useCurrentUser } from '../auth/auth'
 import Profile from '../pages/profile'
 import LoadingScreen from '../components/loadingscreen'
 
-const LoadProfile = (props) => {
+const LoadProfile = () => {
     const [data, setData] = useState({ fetched: null, isFetching: false })
     const { currentUser } = useCurrentUser()
     const { authToken } = useAuth();
 
     useEffect(() => {
-        console.log(props)
         setData({ fetched: null, isFetching: true })
         try {
             const fetchUserData = async () => {
-                let payload = {
-                    id: currentUser
-                }
-                const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/user/id`, payload, {
+                const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/user/id?id=${currentUser}`, {
                     headers: {
                         Authorization: 'Bearer ' + authToken
                     }
@@ -42,7 +38,7 @@ const LoadProfile = (props) => {
     }, [])
 
     return data.fetched && !data.isFetching ? (
-        <Profile {...props} data={data.fetched}/>
+        <Profile data={data.fetched}/>
     ) : (
         <LoadingScreen />
     )
