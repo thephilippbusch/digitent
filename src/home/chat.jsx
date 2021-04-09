@@ -20,6 +20,7 @@ import {
     Send,
     FormClose
 } from 'grommet-icons'
+import { useCurrentUser } from '../auth/auth'
 
 const customMeMessageBoxTheme = {
     box: {
@@ -51,7 +52,7 @@ const Message = (props) => {
     const message = props.message
     const [disableButtons, setDisableButtons] = useState(false)
 
-    return message.from === "user" ? (
+    return message.from === props.currentUser ? (
         <ThemeContext.Extend value={customMeMessageBoxTheme}>
             <Box 
                 background="brand" 
@@ -99,6 +100,7 @@ const Chat = (props) => {
     const [sendMessage, setSendMessage] = useState('')
     const [messages, setMessages] = useState([])
     const messagesEndRef = useRef(null)
+    const { currentUser } = useCurrentUser()
     const ws = props.socket
     const aesKey = props.isPraxiChat ? null : props.channel
 
@@ -150,10 +152,18 @@ const Chat = (props) => {
                 console.log(message)
                 let encrypted_msg = aes256.encrypt(aesKey, message)
                 console.log(encrypted_msg)
-                ws.send(encrypted_msg)
+                let payload = {
+                    message: encrypted_msg,
+                    user: currentUser
+                }
+                ws.send(JSON.stringify(payload))
                 setSendMessage('')
             } else {
-                ws.send(message)
+                let payload = {
+                    message: message,
+                    user: currentUser
+                }
+                ws.send(JSON.stringify(payload))
                 setSendMessage('')
             }
         }
@@ -186,7 +196,12 @@ const Chat = (props) => {
                 <ChatBody>
                     <Box pad="medium" direction="column" justify="end">
                         {(messages || []).map((message, index) => {
-                            return (<Message key={index} message={message} toggleSendMessage={toggleSendMessage}/>)
+                            return (<Message 
+                                key={index} 
+                                message={message} 
+                                toggleSendMessage={toggleSendMessage} 
+                                currentUser={currentUser}
+                            />)
                         })}
                         <div ref={messagesEndRef}/>
                     </Box>
